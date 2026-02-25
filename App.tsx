@@ -109,7 +109,7 @@ const LevelNode: React.FC<{
             </button>
             
             <div className="flex flex-col items-center">
-                <span className={`text-[10px] md:text-xs font-black mb-1 uppercase tracking-tighter transition-colors ${isLocked ? 'text-slate-500' : 'text-slate-400'}`}>{level.name}</span>
+                <span className={`text-[10px] md:text-xs font-black mb-1 tracking-tight transition-colors ${isLocked ? 'text-slate-500' : 'text-slate-400'}`}>{level.name}</span>
                 <div className="flex gap-0.5">
                     {[1, 2, 3].map(i => (
                         <StarIcon key={i} filled={i <= stars} className="w-3 h-3 md:w-4 md:h-4" />
@@ -127,6 +127,13 @@ function App() {
     const totalStars = useMemo(() => Object.values(progress).reduce((a, b) => a + b, 0), [progress]);
     const flatLevels = useMemo(() => LESSON_DEFINITIONS.flatMap(l => l.levels), []);
     const currentLevel = flatLevels.find(l => l.id === currentLevelId);
+    
+    const isFinalLevelInLesson = useMemo(() => {
+        if (!currentLevelId) return false;
+        const currentIndex = flatLevels.findIndex(l => l.id === currentLevelId);
+        // It's the final level only if it's the last level across all lessons
+        return currentIndex === flatLevels.length - 1;
+    }, [currentLevelId, flatLevels]);
 
     const handleNextLevel = () => {
         const currentIndex = flatLevels.findIndex(l => l.id === currentLevelId);
@@ -151,6 +158,7 @@ function App() {
                         onSavePartialProgress={(state) => savePartialProgress(currentLevel.id, state)}
                         progress={progress}
                         lessonTitle={LESSON_DEFINITIONS.find(l => l.levels.some(lev => lev.id === currentLevelId))?.title}
+                        isFinalLevelInLesson={isFinalLevelInLesson}
                     />
                 ) : (
                     <div className="relative min-h-screen flex flex-col items-center py-12 px-6 overflow-y-auto">
@@ -161,14 +169,14 @@ function App() {
                                 <StarIcon filled={true} className="w-8 h-8" />
                                 <span className="text-4xl font-black text-white leading-none">{totalStars}</span>
                             </div>
-                            <p className="text-[10px] text-center text-slate-400 font-bold uppercase tracking-widest mt-1">
+                            <p className="text-[10px] text-center text-slate-400 font-bold tracking-wide mt-1">
                                 Earn {AVATAR_UNLOCK_THRESHOLD} stars for an avatar.
                             </p>
                         </div>
 
                         {/* 2. Title & Goal */}
                         <div className="text-center mb-24 mt-4 w-full">
-                            <h1 className="text-6xl md:text-7xl font-black text-sky-500 mb-4 tracking-tighter uppercase leading-none italic">
+                            <h1 className="text-6xl md:text-7xl font-black text-sky-500 mb-4 tracking-tighter leading-none italic">
                                 Pattern & Algebra
                             </h1>
                             <p className="text-xl md:text-2xl font-bold text-slate-400 italic">
@@ -182,7 +190,7 @@ function App() {
                                 <React.Fragment key={lessonIdx}>
                                     <div className="flex flex-col items-center group">
                                         <div className="bg-[#111827] rounded-[40px] p-10 border border-slate-800 shadow-2xl flex flex-col items-center min-w-[340px]">
-                                            <h3 className="text-2xl font-black text-sky-400 uppercase tracking-tighter mb-10 text-center italic">{lesson.title}</h3>
+                                            <h3 className="text-2xl font-black text-sky-400 tracking-tight mb-10 text-center italic">{lesson.title}</h3>
                                             <div className="flex gap-8">
                                                 {lesson.levels.map((level) => (
                                                     <LevelNode 

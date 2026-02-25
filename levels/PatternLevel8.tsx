@@ -1,8 +1,6 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import type { LevelComponentProps } from '../types';
-import InstructionButton from '../components/InstructionButton';
-import InstructionModal from '../components/InstructionModal';
 import LevelCompleteModal from '../components/LevelCompleteModal';
 
 type Phase = 'intro' | 'practice' | 'assess';
@@ -48,13 +46,12 @@ const PhaseAssess: React.FC<{ onComplete: (stars: number) => void }> = ({ onComp
 
     return (
         <div className="flex flex-col items-center justify-center h-full p-4 text-center animate-fade-in w-full max-w-3xl">
-            <h2 className="text-3xl font-black text-sky-400 mb-8 uppercase italic">Growth Word Problems</h2>
             <div className={`bg-slate-800 p-10 rounded-2xl border-2 mb-8 w-full shadow-2xl transition-colors duration-300 ${showHint ? 'border-red-500' : 'border-slate-600'}`}>
                 <p className="text-2xl text-white mb-6 leading-relaxed italic font-bold">"{questions[index].q}"</p>
                 
                 {showHint && (
                     <div className="mb-6 p-4 bg-red-500/10 rounded-xl animate-fade-in border border-red-500/20">
-                        <p className="text-red-400 font-bold italic">Hint: {questions[index].hint}</p>
+                        <p className="text-red-400 font-bold italic">{questions[index].hint}</p>
                     </div>
                 )}
 
@@ -72,13 +69,12 @@ const PhaseAssess: React.FC<{ onComplete: (stars: number) => void }> = ({ onComp
     );
 };
 
-const PatternLevel8: React.FC<LevelComponentProps> = ({ onComplete, onExit, partialProgress, onSavePartialProgress }) => {
+const PatternLevel8: React.FC<LevelComponentProps> = ({ onComplete, onExit, partialProgress, onSavePartialProgress, isFinalLevelInLesson = false }) => {
   const [phase, setPhase] = useState<Phase>(() => partialProgress?.phase || 'intro');
   const [earnedStars, setEarnedStars] = useState<number>(0);
   const [showModal, setShowModal] = useState(false);
   const [showPracticeHint, setShowPracticeHint] = useState(false);
   const isCompletedRef = useRef(false);
-  const [instrOpen, setInstrOpen] = useState(false);
 
   useEffect(() => {
     return () => { if (!isCompletedRef.current && onSavePartialProgress) onSavePartialProgress({ phase }); };
@@ -97,27 +93,20 @@ const PatternLevel8: React.FC<LevelComponentProps> = ({ onComplete, onExit, part
             return <div key={p} className={`w-3 h-3 rounded-full ${bg}`} />;
         })}
       </div>
-      <InstructionButton onClick={() => setInstrOpen(true)} />
-      <InstructionModal isOpen={instrOpen} onClose={() => setInstrOpen(false)} title="Growth Master">
-        <p>Apply your knowledge of constant (linear) growth to solve real-world patterns.</p>
-      </InstructionModal>
-
       {phase === 'intro' && (
           <div className="flex flex-col items-center justify-center h-full p-4 text-center">
-              <h2 className="text-4xl font-black text-sky-400 mb-6 italic uppercase tracking-tighter">Modeling Growth</h2>
-              <p className="text-xl max-w-xl text-slate-300 mb-8 italic">Predict what happens in a linear pattern into the future.</p>
+              <p className="text-3xl max-w-xl text-white mb-8 font-bold">Predict what happens in a linear pattern into the future.</p>
               <button onClick={() => setPhase('practice')} className="bg-sky-500 px-12 py-3 rounded-full font-black uppercase italic shadow-lg hover:scale-105 transition-all">Start</button>
           </div>
       )}
       {phase === 'practice' && (
           <div className="flex flex-col items-center justify-center h-full p-4 text-center w-full max-w-3xl">
-              <h2 className="text-3xl font-black mb-8 italic uppercase text-sky-400">Practice Task</h2>
               <div className={`bg-slate-800 p-10 rounded-3xl border-2 mb-8 w-full shadow-2xl transition-colors duration-300 ${showPracticeHint ? 'border-red-500' : 'border-slate-600'}`}>
-                <p className="text-2xl text-white mb-6 italic font-bold leading-relaxed">"Start at 10. Add 5 every step. What is Term 10?"</p>
+                <p className="text-2xl text-white mb-6 leading-relaxed font-bold">"Start at 10. Add 5 every step. What is Term 10?"</p>
                 
                 {showPracticeHint && (
                     <div className="mb-8 p-6 bg-red-500/10 rounded-xl animate-fade-in border border-red-500/20">
-                        <p className="text-red-400 font-bold italic text-lg leading-relaxed">Hint: Term 1 is 10. You add 5 for each step. Term 10 is 9 steps after Term 1 (10 + 9 × 5).</p>
+                        <p className="text-red-400 font-bold italic text-lg leading-relaxed">Term 1 is 10. You add 5 for each step. Term 10 is 9 steps after Term 1 (10 + 9 × 5).</p>
                     </div>
                 )}
 
@@ -133,7 +122,6 @@ const PatternLevel8: React.FC<LevelComponentProps> = ({ onComplete, onExit, part
       <LevelCompleteModal
         isOpen={showModal}
         stars={earnedStars}
-        nextLabel="Back to Map"
         onNext={() => onExit?.()}
         onReplay={() => {
           setPhase('intro');
@@ -141,6 +129,7 @@ const PatternLevel8: React.FC<LevelComponentProps> = ({ onComplete, onExit, part
           setShowPracticeHint(false);
           isCompletedRef.current = false;
         }}
+        isFinalLevel={isFinalLevelInLesson}
       />
     </div>
   );

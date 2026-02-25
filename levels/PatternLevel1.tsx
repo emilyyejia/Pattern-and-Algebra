@@ -19,7 +19,7 @@ const PATTERN_GLOSSARY: GlossaryEntry[] = [
   }
 ];
 
-const PatternLevel1: React.FC<LevelComponentProps> = ({ onComplete, onExit, onNext }) => {
+const PatternLevel1: React.FC<LevelComponentProps> = ({ onComplete, onExit, onNext, isFinalLevelInLesson = false }) => {
   const [selectedTerm, setSelectedTerm] = useState<number | null>(null);
   const [matches, setMatches] = useState<Record<number, number | null>>({ 1: null, 2: null, 3: null, 4: null });
   const [errors, setErrors] = useState(0);
@@ -43,8 +43,6 @@ const PatternLevel1: React.FC<LevelComponentProps> = ({ onComplete, onExit, onNe
       setErrors(e => e + 1);
       setShowHint(true);
       setSelectedTerm(null);
-      // Hide hint after some time
-      setTimeout(() => setShowHint(false), 5000);
     }
   };
 
@@ -76,10 +74,7 @@ const PatternLevel1: React.FC<LevelComponentProps> = ({ onComplete, onExit, onNe
 
       <div className="w-full max-w-4xl flex flex-col items-center animate-fade-in py-8 relative">
         <div className="text-center mb-12">
-          <h2 className="text-4xl font-black text-sky-400 uppercase italic tracking-tighter mb-4">Match the Values!</h2>
-          <div className="bg-slate-800/50 px-8 py-4 rounded-2xl border-2 border-emerald-500/30 inline-block mb-6">
-             <p className="text-xl font-bold text-emerald-400">Rule: Double the Term Number</p>
-          </div>
+          <p className="text-3xl font-bold text-white mb-6">Double the Term Number</p>
 
           {/* Centered Hint Area */}
           <div className="h-16 flex items-center justify-center">
@@ -93,7 +88,7 @@ const PatternLevel1: React.FC<LevelComponentProps> = ({ onComplete, onExit, onNe
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 w-full mb-12">
           <div className="flex flex-col gap-6">
-            <h3 className="text-slate-500 font-black uppercase text-xs tracking-[0.3em] mb-2">1. Select a Term</h3>
+            <h3 className="text-xl font-bold text-white mb-2">1. Select a Term</h3>
             {[1, 2, 3, 4].map(t => (
               <button
                 key={t}
@@ -121,7 +116,7 @@ const PatternLevel1: React.FC<LevelComponentProps> = ({ onComplete, onExit, onNe
           </div>
 
           <div className="flex flex-col gap-6">
-            <h3 className="text-slate-500 font-black uppercase text-xs tracking-[0.3em] mb-2">2. Pick the Correct Box</h3>
+            <h3 className="text-xl font-bold text-white mb-2">2. Pick the Correct Value</h3>
             <div className="grid grid-cols-2 gap-4 h-full">
               {values.map(v => {
                 const isMatched = Object.values(matches).includes(v);
@@ -165,6 +160,7 @@ const PatternLevel1: React.FC<LevelComponentProps> = ({ onComplete, onExit, onNe
           setShowWin(false);
           setShowHint(false);
         }}
+        isFinalLevel={isFinalLevelInLesson}
       />
     </div>
   );

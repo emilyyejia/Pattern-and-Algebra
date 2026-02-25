@@ -6,7 +6,7 @@ interface LevelCompleteModalProps {
   stars: number;
   onReplay: () => void;
   onNext: () => void;
-  nextLabel?: string;
+  isFinalLevel?: boolean;
 }
 
 const StarIcon: React.FC<{ filled: boolean }> = ({ filled }) => (
@@ -22,19 +22,36 @@ const StarIcon: React.FC<{ filled: boolean }> = ({ filled }) => (
   </svg>
 );
 
-const LevelCompleteModal: React.FC<LevelCompleteModalProps> = ({ isOpen, stars, onReplay, onNext, nextLabel = "Next level" }) => {
+const LevelCompleteModal: React.FC<LevelCompleteModalProps> = ({ isOpen, stars, onReplay, onNext, isFinalLevel = false }) => {
   if (!isOpen) return null;
 
-  const isSuccess = stars >= 2;
-  const isPerfect = stars === 3;
+  const heading = stars === 1 ? "Good Effort!" : "Level Complete!";
+  
+  const getMessage = () => {
+    if (stars === 1) {
+      return (
+        <>
+          <p className="mb-3">You need 2 stars to unlock the next level.</p>
+          <p>Answer correctly on the first try to earn more stars!</p>
+        </>
+      );
+    } else if (stars === 2) {
+      return "Answer correctly on the first try to earn more stars!";
+    }
+    return null; // 3 stars - no message
+  };
+
+  const getNextButtonLabel = () => {
+    return isFinalLevel ? "Back to Map" : "Next Level";
+  };
 
   return (
     <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex flex-col justify-center items-center z-[300] p-4 animate-fade-in">
       <div className="bg-[#1E293B] p-10 md:p-12 rounded-[40px] shadow-2xl text-center max-w-md w-full border border-slate-700">
         
         {/* Heading */}
-        <h2 className={`text-4xl font-black mb-6 tracking-tight italic uppercase ${isSuccess ? 'text-[#FACC15]' : 'text-sky-400'}`}>
-          {isSuccess ? "Level complete!" : "Good effort!"}
+        <h2 className="text-4xl font-black mb-6 tracking-tight italic uppercase text-[#FACC15]">
+          {heading}
         </h2>
 
         {/* Stars */}
@@ -43,28 +60,26 @@ const LevelCompleteModal: React.FC<LevelCompleteModalProps> = ({ isOpen, stars, 
         </div>
 
         {/* Instruction Text */}
-        <div className="text-slate-300 font-bold mb-10 text-lg leading-relaxed px-4">
-          {!isSuccess ? (
-            "Get two stars to unlock the next level. Answer correctly on your first try to earn more stars!"
-          ) : !isPerfect ? (
-            "Answer correctly on your first try to earn more stars!"
-          ) : (
-            "You mastered this challenge perfectly!"
-          )}
-        </div>
+        {getMessage() && (
+          <div className="text-slate-300 font-bold mb-10 text-lg leading-relaxed px-4">
+            {getMessage()}
+          </div>
+        )}
 
         {/* Buttons */}
         <div className="flex flex-col gap-4">
-          {isSuccess && (
+          {/* Show Next Level button for 2 or 3 stars */}
+          {stars >= 2 && (
             <button
               onClick={onNext}
               className="w-full bg-[#10B981] hover:bg-emerald-400 text-white font-black py-5 rounded-2xl shadow-lg transition-all text-2xl uppercase tracking-tighter italic"
             >
-              {nextLabel}
+              {getNextButtonLabel()}
             </button>
           )}
           
-          {(!isPerfect || !isSuccess) && (
+          {/* Show Replay button only for 1 or 2 stars (not for 3 stars) */}
+          {stars < 3 && (
             <button
               onClick={onReplay}
               className="w-full bg-[#3B82F6] hover:bg-blue-500 text-white font-black py-5 rounded-2xl shadow-lg transition-all text-2xl uppercase tracking-tighter italic"

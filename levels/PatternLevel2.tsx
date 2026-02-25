@@ -19,7 +19,7 @@ const PATTERN_GLOSSARY: GlossaryEntry[] = [
   }
 ];
 
-const PatternLevel2: React.FC<LevelComponentProps> = ({ onComplete, onExit, onNext }) => {
+const PatternLevel2: React.FC<LevelComponentProps> = ({ onComplete, onExit, onNext, isFinalLevelInLesson = false }) => {
   const [step, setStep] = useState(0);
   const [errors, setErrors] = useState(0);
   const [showModal, setShowModal] = useState(false);
@@ -66,8 +66,7 @@ const PatternLevel2: React.FC<LevelComponentProps> = ({ onComplete, onExit, onNe
       <GlossaryModal isOpen={isGlossaryOpen} onClose={() => setIsGlossaryOpen(false)} entries={PATTERN_GLOSSARY} />
 
       <div className="flex flex-col items-center pt-16 w-full max-w-2xl px-4 animate-fade-in text-center">
-        <h2 className="text-4xl font-black text-sky-400 mb-4 uppercase tracking-tighter italic">Pattern Sorter 🕵️</h2>
-        <p className="text-slate-400 text-lg mb-12 italic">Identify the pattern type.</p>
+        <p className="text-3xl mb-12 font-bold text-white">Identify the pattern type.</p>
 
         <div className="bg-[#121B2B] p-12 rounded-[40px] border border-slate-800 mb-10 w-full flex items-center justify-center min-h-[240px] shadow-2xl">
           <div className="text-5xl bg-slate-900/50 p-8 rounded-3xl shadow-inner border border-slate-700 text-white font-black italic">
@@ -97,6 +96,7 @@ const PatternLevel2: React.FC<LevelComponentProps> = ({ onComplete, onExit, onNe
           setErrors(0);
           setShowModal(false);
         }}
+        isFinalLevel={isFinalLevelInLesson}
       />
     </div>
   );

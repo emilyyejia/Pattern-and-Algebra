@@ -2,18 +2,15 @@
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import type { LevelComponentProps } from '../types';
-import InstructionButton from '../components/InstructionButton';
-import InstructionModal from '../components/InstructionModal';
 import LevelCompleteModal from '../components/LevelCompleteModal';
 
-const PatternLevel7: React.FC<LevelComponentProps> = ({ onComplete, onExit, onNext }) => {
+const PatternLevel7: React.FC<LevelComponentProps> = ({ onComplete, onExit, onNext, isFinalLevelInLesson = false }) => {
   const [index, setIndex] = useState(0);
   const [stage, setStage] = useState(1); // For stage-based questions: 1=Identify, 2=Explanation
   const [errors, setErrors] = useState(0);
   const [feedback, setFeedback] = useState<'correct' | 'incorrect' | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [earnedStars, setEarnedStars] = useState(0);
-  const [instrOpen, setInstrOpen] = useState(false);
   
   // For Q1 Multi-select
   const [selectedIndices, setSelectedIndices] = useState<number[]>([]);
@@ -65,7 +62,14 @@ const PatternLevel7: React.FC<LevelComponentProps> = ({ onComplete, onExit, onNe
   const currentQ = questions[index];
 
   const handleMultiSelect = (idx: number) => {
-    if (feedback) return;
+    // Clear feedback and allow reselection when user clicks after getting wrong answer
+    if (feedback === 'incorrect') {
+      setFeedback(null);
+      setSelectedIndices([idx]);
+      return;
+    }
+    if (feedback === 'correct') return;
+    
     setSelectedIndices(prev => {
         if (prev.includes(idx)) return prev.filter(i => i !== idx);
         if (prev.length < 2) return [...prev, idx];
@@ -92,7 +96,6 @@ const PatternLevel7: React.FC<LevelComponentProps> = ({ onComplete, onExit, onNe
     } else {
         setErrors(e => e + 1);
         setFeedback('incorrect');
-        setTimeout(() => setFeedback(null), 3000);
     }
   };
 
@@ -107,7 +110,6 @@ const PatternLevel7: React.FC<LevelComponentProps> = ({ onComplete, onExit, onNe
     } else {
       setErrors(e => e + 1);
       setFeedback('incorrect');
-      setTimeout(() => setFeedback(null), 2000);
     }
   };
 
@@ -130,7 +132,6 @@ const PatternLevel7: React.FC<LevelComponentProps> = ({ onComplete, onExit, onNe
     } else {
       setErrors(e => e + 1);
       setFeedback('incorrect');
-      setTimeout(() => setFeedback(null), 1000);
     }
   };
 
@@ -145,20 +146,14 @@ const PatternLevel7: React.FC<LevelComponentProps> = ({ onComplete, onExit, onNe
         document.getElementById('portal-progress-dots')!
       )}
 
-      <InstructionButton onClick={() => setInstrOpen(true)} />
-      <InstructionModal isOpen={instrOpen} onClose={() => setInstrOpen(false)} title="Linear Growth Rules">
-        <p>A pattern is <strong>Linear</strong> if it adds or subtracts the <strong>same amount</strong> every single time.</p>
-      </InstructionModal>
-
       <div className="flex flex-col items-center animate-fade-in text-center w-full max-w-2xl pt-4">
-        <h1 className="text-4xl font-black text-sky-400 mb-2 uppercase tracking-tighter italic">Introduction: What is a Linear Pattern?</h1>
-        <p className="text-slate-400 text-lg mb-10 italic font-bold uppercase tracking-widest">Task {index + 1} of {questions.length}</p>
+        <p className="text-slate-400 text-lg mb-10 italic font-bold tracking-wide">Task {index + 1} of {questions.length}</p>
 
         <div className={`bg-slate-800 p-12 rounded-[40px] border-4 transition-all duration-300 mb-10 w-full shadow-2xl flex flex-col items-center min-h-[450px] justify-center ${feedback === 'incorrect' ? 'border-red-500 animate-shake' : feedback === 'correct' ? 'border-emerald-500 scale-105' : 'border-slate-700'}`}>
             
             {currentQ.type === 'multi' ? (
                 <div className="w-full space-y-8 animate-fade-in">
-                    <h2 className="text-2xl font-black text-white italic tracking-tight mb-6">"{currentQ.instruction}"</h2>
+                    <h2 className="text-3xl font-bold text-white mb-6">"{currentQ.instruction}"</h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {/* FIX: Assert options as object array type for multi-select questions to resolve property access error on 'opt.label'. */}
                         {(currentQ.options as { label: string; isCorrect: boolean }[]).map((opt, i) => (
@@ -179,44 +174,44 @@ const PatternLevel7: React.FC<LevelComponentProps> = ({ onComplete, onExit, onNe
                         Submit
                     </button>
                     {feedback === 'correct' && <p className="text-emerald-400 font-bold italic animate-fade-in">{currentQ.correctFeedback}</p>}
-                    {feedback === 'incorrect' && <p className="text-red-400 font-bold italic animate-fade-in">Hint: {currentQ.hint}</p>}
+                    {feedback === 'incorrect' && <p className="text-red-400 font-bold italic animate-fade-in">{currentQ.hint}</p>}
                 </div>
             ) : (
                 <>
                     <div className="text-center mb-10">
-                        <p className="text-slate-500 font-black uppercase text-xs tracking-widest mb-2">The Pattern</p>
+                        <p className="text-slate-500 font-bold text-xs tracking-wide mb-2">The Pattern</p>
                         <p className="text-4xl font-black text-white leading-tight italic">"{currentQ.label}"</p>
                     </div>
 
                     {stage === 1 ? (
                     <div className="w-full space-y-6 animate-fade-in">
-                        <h3 className="text-2xl font-bold text-center text-slate-200 italic mb-4 font-black italic uppercase tracking-tighter">Linear or Not?</h3>
+                        <h3 className="text-3xl font-bold text-center text-white mb-4">Linear or Not?</h3>
                         <div className="flex gap-4 w-full">
                         <button 
                             onClick={() => handleLinearChoice(true)} 
-                            className="flex-1 bg-emerald-600 hover:bg-emerald-500 p-6 rounded-2xl text-white font-black text-2xl shadow-xl uppercase italic transition-all active:scale-95 border-b-8 border-emerald-800 active:border-b-0 active:translate-y-2"
+                            className="flex-1 bg-emerald-600 hover:bg-emerald-500 p-6 rounded-2xl text-white font-black text-2xl shadow-xl italic transition-all active:scale-95 border-b-8 border-emerald-800 active:border-b-0 active:translate-y-2"
                         >
                             Linear
                         </button>
                         <button 
                             onClick={() => handleLinearChoice(false)} 
-                            className="flex-1 bg-purple-600 hover:bg-purple-500 p-6 rounded-2xl text-white font-black text-2xl shadow-xl uppercase italic transition-all active:scale-95 border-b-8 border-purple-800 active:border-b-0 active:translate-y-2"
+                            className="flex-1 bg-purple-600 hover:bg-purple-500 p-6 rounded-2xl text-white font-black text-2xl shadow-xl italic transition-all active:scale-95 border-b-8 border-purple-800 active:border-b-0 active:translate-y-2"
                         >
                             Non-linear
                         </button>
                         </div>
                         {feedback === 'incorrect' && (
                         <div className="bg-red-500/10 border border-red-500/30 p-4 rounded-xl mt-4 animate-fade-in">
-                            <p className="text-red-400 font-bold text-center italic">Hint: Linear means when a pattern that changes by the same amount each step.</p>
+                            <p className="text-red-400 font-bold text-center italic">Linear means when a pattern that changes by the same amount each step.</p>
                         </div>
                         )}
                     </div>
                     ) : (
                     <div className="w-full animate-fade-in space-y-6">
-                        <div className="bg-emerald-500/20 py-2 px-4 rounded-full text-emerald-400 font-black text-center text-sm uppercase tracking-widest mb-4">
+                        <div className="bg-emerald-500/20 py-2 px-4 rounded-full text-emerald-400 font-black text-center text-sm tracking-wide mb-4">
                         Correct! It's {currentQ.isLinear ? 'Linear' : 'Non-linear'}
                         </div>
-                        <h3 className="text-2xl font-bold text-center text-slate-200 italic uppercase font-black italic uppercase tracking-tighter">How do you know?</h3>
+                        <h3 className="text-2xl font-bold text-center text-slate-200 italic">How do you know?</h3>
                         <div className="relative">
                         <select 
                             onChange={handleExplanationChange} 
@@ -253,6 +248,7 @@ const PatternLevel7: React.FC<LevelComponentProps> = ({ onComplete, onExit, onNe
           setFeedback(null);
           setSelectedIndices([]);
         }}
+        isFinalLevel={isFinalLevelInLesson}
       />
     </div>
   );

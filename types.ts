@@ -42,6 +42,7 @@ export interface LevelComponentProps {
   progress?: PlayerProgress;
   levelId?: string;
   onNext?: () => void;
+  isFinalLevelInLesson?: boolean;
 }
 
 export interface QuizQuestion {

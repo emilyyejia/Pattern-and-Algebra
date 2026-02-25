@@ -28,7 +28,7 @@ type MasteryTask = {
   hint: string;
 };
 
-const PatternLevelMastery: React.FC<LevelComponentProps> = ({ onComplete, onExit, onNext }) => {
+const PatternLevelMastery: React.FC<LevelComponentProps> = ({ onComplete, onExit, onNext, isFinalLevelInLesson = false }) => {
   const [taskIdx, setTaskIdx] = useState(0);
   const [errors, setErrors] = useState(0);
   const [feedback, setFeedback] = useState<'correct' | 'incorrect' | null>(null);
@@ -100,8 +100,6 @@ const PatternLevelMastery: React.FC<LevelComponentProps> = ({ onComplete, onExit
     } else {
       setErrors(e => e + 1);
       setFeedback('incorrect');
-      // Hint stays for 3 seconds as requested
-      setTimeout(() => setFeedback(null), 3000);
     }
   };
 
@@ -124,12 +122,11 @@ const PatternLevelMastery: React.FC<LevelComponentProps> = ({ onComplete, onExit
       <GlossaryModal isOpen={isGlossaryOpen} onClose={() => setIsGlossaryOpen(false)} entries={PATTERN_GLOSSARY} />
 
       <div className="flex flex-col items-center animate-fade-in text-center w-full max-w-3xl pt-4">
-        <h1 className="text-4xl font-black text-sky-400 mb-2 uppercase tracking-tighter italic">Mastery: Pattern Detective 🔍</h1>
-        <p className="text-slate-400 text-lg mb-8 italic font-bold uppercase tracking-widest">Case {taskIdx + 1} of {tasks.length}</p>
+        <p className="text-slate-400 text-lg mb-8 italic font-bold tracking-wide">Case {taskIdx + 1} of {tasks.length}</p>
 
         <div className={`bg-slate-800 p-10 md:p-14 rounded-[50px] border-4 transition-all duration-300 mb-10 w-full shadow-2xl relative overflow-hidden flex flex-col items-center min-h-[450px] justify-center ${feedback === 'incorrect' ? 'border-red-500 animate-shake' : feedback === 'correct' ? 'border-emerald-500 scale-105' : 'border-slate-700'}`}>
             
-            <h2 className="text-2xl font-black text-white mb-10 uppercase italic tracking-tight">{currentTask.instruction}</h2>
+            <h2 className="text-3xl font-bold text-white mb-10">{currentTask.instruction}</h2>
 
             <div className="flex flex-wrap gap-4 justify-center mb-12">
                 {Array.isArray(currentTask.sequence) ? (
@@ -160,7 +157,7 @@ const PatternLevelMastery: React.FC<LevelComponentProps> = ({ onComplete, onExit
 
             {feedback === 'incorrect' && (
                 <div className="mt-8 bg-red-500/10 border border-red-500/30 p-4 rounded-xl animate-fade-in">
-                    <p className="text-red-400 font-bold italic">Hint: {currentTask.hint}</p>
+                    <p className="text-red-400 font-bold italic">{currentTask.hint}</p>
                 </div>
             )}
         </div>
@@ -176,6 +173,7 @@ const PatternLevelMastery: React.FC<LevelComponentProps> = ({ onComplete, onExit
           setShowModal(false);
           setFeedback(null);
         }}
+        isFinalLevel={isFinalLevelInLesson}
       />
     </div>
   );

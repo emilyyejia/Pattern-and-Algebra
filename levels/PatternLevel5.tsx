@@ -27,7 +27,7 @@ type ValueTask = {
   hint: string;
 };
 
-const PatternLevel5: React.FC<LevelComponentProps> = ({ onComplete, onExit, onNext }) => {
+const PatternLevel5: React.FC<LevelComponentProps> = ({ onComplete, onExit, onNext, isFinalLevelInLesson = false }) => {
   const [taskIdx, setTaskIdx] = useState(0);
   const [errors, setErrors] = useState(0);
   const [inputVal, setInputVal] = useState('');
@@ -103,7 +103,6 @@ const PatternLevel5: React.FC<LevelComponentProps> = ({ onComplete, onExit, onNe
     } else {
       setErrors(e => e + 1);
       setFeedback('incorrect');
-      setTimeout(() => setFeedback(null), 2500);
     }
   };
 
@@ -128,12 +127,11 @@ const PatternLevel5: React.FC<LevelComponentProps> = ({ onComplete, onExit, onNe
       <GlossaryModal isOpen={isGlossaryOpen} onClose={() => setIsGlossaryOpen(false)} entries={PATTERN_GLOSSARY} />
 
       <div className="flex flex-col items-center animate-fade-in text-center w-full max-w-2xl pt-4">
-        <h1 className="text-4xl font-black text-sky-400 mb-2 uppercase tracking-tighter italic">Value Architect: Level 2</h1>
-        <p className="text-slate-400 text-lg mb-8 italic font-bold uppercase tracking-widest">Task {taskIdx + 1} of {tasks.length}</p>
+        <p className="text-slate-400 text-lg mb-8 font-bold tracking-wide">Task {taskIdx + 1} of {tasks.length}</p>
 
         <div className={`bg-slate-800 p-10 md:p-14 rounded-[50px] border-4 transition-all duration-300 mb-10 w-full shadow-2xl relative overflow-hidden flex flex-col items-center min-h-[450px] justify-center ${feedback === 'incorrect' ? 'border-red-500 animate-shake' : feedback === 'correct' ? 'border-emerald-500 scale-105' : 'border-slate-700'}`}>
             
-            <h2 className="text-2xl font-black text-white mb-10 uppercase italic tracking-tight">{currentTask.instruction}</h2>
+            <h2 className="text-3xl font-bold text-white mb-10">{currentTask.instruction}</h2>
 
             <div className="flex flex-wrap gap-4 justify-center mb-12">
                 {currentTask.sequence.map((item, i) => (
@@ -167,7 +165,7 @@ const PatternLevel5: React.FC<LevelComponentProps> = ({ onComplete, onExit, onNe
             </form>
 
             {feedback === 'incorrect' && (
-                <p className="mt-8 text-red-400 font-bold italic animate-fade-in">Hint: {currentTask.hint}</p>
+                <p className="mt-8 text-red-400 font-bold italic animate-fade-in">{currentTask.hint}</p>
             )}
         </div>
       </div>
@@ -183,6 +181,7 @@ const PatternLevel5: React.FC<LevelComponentProps> = ({ onComplete, onExit, onNe
           setShowModal(false);
           setFeedback(null);
         }}
+        isFinalLevel={isFinalLevelInLesson}
       />
     </div>
   );

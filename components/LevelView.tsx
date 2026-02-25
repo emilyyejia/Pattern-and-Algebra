@@ -21,9 +21,10 @@ interface LevelViewProps {
   onSavePartialProgress?: (state: any | null) => void;
   progress?: PlayerProgress;
   lessonTitle?: string | null;
+  isFinalLevelInLesson?: boolean;
 }
 
-const LevelView: React.FC<LevelViewProps> = ({ level, onBackToMap, onComplete, onExit, onNext, partialProgress, onSavePartialProgress, progress, lessonTitle }) => {
+const LevelView: React.FC<LevelViewProps> = ({ level, onBackToMap, onComplete, onExit, onNext, partialProgress, onSavePartialProgress, progress, lessonTitle, isFinalLevelInLesson = false }) => {
   const LevelComponent = level.component;
   const { 
     activeTool, 
@@ -80,6 +81,7 @@ const LevelView: React.FC<LevelViewProps> = ({ level, onBackToMap, onComplete, o
               onSavePartialProgress={onSavePartialProgress}
               progress={progress}
               levelId={level.id}
+              isFinalLevelInLesson={isFinalLevelInLesson}
             />
           </div>
         </div>

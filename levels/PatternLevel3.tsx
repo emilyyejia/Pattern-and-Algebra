@@ -26,7 +26,7 @@ type RuleTask = {
   hint: string;
 };
 
-const PatternLevel3: React.FC<LevelComponentProps> = ({ onComplete, onExit, onNext }) => {
+const PatternLevel3: React.FC<LevelComponentProps> = ({ onComplete, onExit, onNext, isFinalLevelInLesson = false }) => {
   const [step, setStep] = useState(0);
   const [errors, setErrors] = useState(0);
   const [feedback, setFeedback] = useState<'correct' | 'incorrect' | null>(null);
@@ -86,7 +86,6 @@ const PatternLevel3: React.FC<LevelComponentProps> = ({ onComplete, onExit, onNe
     } else {
       setErrors(e => e + 1);
       setFeedback('incorrect');
-      setTimeout(() => setFeedback(null), 2500);
     }
   };
 
@@ -111,8 +110,7 @@ const PatternLevel3: React.FC<LevelComponentProps> = ({ onComplete, onExit, onNe
       <GlossaryModal isOpen={isGlossaryOpen} onClose={() => setIsGlossaryOpen(false)} entries={PATTERN_GLOSSARY} />
 
       <div className="flex flex-col items-center animate-fade-in text-center w-full max-w-2xl pt-8">
-        <h1 className="text-4xl font-black text-sky-400 mb-2 uppercase tracking-tighter italic">Rule Detective: Level 1</h1>
-        <p className="text-slate-400 text-xl font-bold mb-10 italic">What is the rule?</p>
+        <p className="text-3xl font-bold text-white mb-10">What is the rule?</p>
         
         <div className={`bg-slate-800 p-12 rounded-[40px] border-4 transition-all duration-300 mb-10 w-full shadow-2xl relative ${feedback === 'incorrect' ? 'border-red-500 animate-shake' : feedback === 'correct' ? 'border-emerald-500 scale-105' : 'border-slate-700'}`}>
             <div className="flex flex-wrap gap-4 justify-center mb-12 text-4xl font-black text-white">
@@ -136,7 +134,7 @@ const PatternLevel3: React.FC<LevelComponentProps> = ({ onComplete, onExit, onNe
             </div>
 
             {feedback === 'incorrect' && (
-                <p className="mt-8 text-red-400 font-bold italic animate-fade-in">Hint: {currentTask.hint}</p>
+                <p className="mt-8 text-red-400 font-bold italic animate-fade-in">{currentTask.hint}</p>
             )}
         </div>
       </div>
@@ -151,6 +149,7 @@ const PatternLevel3: React.FC<LevelComponentProps> = ({ onComplete, onExit, onNe
           setShowModal(false);
           setFeedback(null);
         }}
+        isFinalLevel={isFinalLevelInLesson}
       />
     </div>
   );
