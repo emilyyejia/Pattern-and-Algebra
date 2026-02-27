@@ -42,42 +42,42 @@ const PatternLevel5: React.FC<LevelComponentProps> = ({ onComplete, onExit, onNe
       sequence: [2, 4, 6, 8, '?'], 
       answer: '10', 
       instruction: "What number comes next?", 
-      hint: "Rule is add 2 each time." 
+      hint: "What is the difference between 2 and 4? Does the same change happen again?" 
     },
     { 
       type: 'missing', 
       sequence: [10, 20, 30, 40, '?'], 
       answer: '50', 
       instruction: "What number comes next?", 
-      hint: "What's the difference between 10 and 20?" 
+      hint: "Each number goes up by the same amount — what is it?" 
     },
     { 
       type: 'missing', 
       sequence: [5, 8, 11, 14, '?'], 
       answer: '17', 
       instruction: "Extend the pattern!", 
-      hint: "Rule is add 3 each time." 
+      hint: "Find the difference between 5 and 8. Does that same difference appear again?" 
     },
     { 
       type: 'gap', 
       sequence: [3, 7, '?', 15, 19], 
       answer: '11', 
       instruction: "Find the missing piece!", 
-      hint: "Check the step between 7 and 15." 
+      hint: "Almost! Look closely at how the numbers change each time. How many steps are they moving?" 
     },
     { 
       type: 'gap', 
       sequence: [100, 95, 90, '?', 80], 
       answer: '85', 
       instruction: "Fill the gap!", 
-      hint: "The numbers are shrinking." 
+      hint: "The numbers are going down — what number sits exactly halfway between 90 and 80?" 
     },
     { 
       type: 'jump', 
       sequence: [2, 4, 6, 8], 
       answer: '20', 
-      instruction: "The Big Jump: What is Term 10?", 
-      hint: "Look for a relationship between Term Number and Value." 
+      instruction: "The big jump: What is term 10?", 
+      hint: "Almost! Find the jump from term 1 to term 2, then repeat it until term 10." 
     }
   ];
 

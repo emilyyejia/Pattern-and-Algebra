@@ -10,12 +10,12 @@ const PATTERN_GLOSSARY: GlossaryEntry[] = [
   {
     term: "term",
     definition: "The position in a pattern (1st, 2nd, 3rd...).",
-    example: "Position 1 is Term 1."
+    example: "Position 1 is term 1."
   },
   {
     term: "value",
     definition: "The actual number at that position.",
-    example: "If the first number is 10, the Value is 10."
+    example: "If the first number is 10, the value is 10."
   }
 ];
 
@@ -74,7 +74,7 @@ const PatternLevel1: React.FC<LevelComponentProps> = ({ onComplete, onExit, onNe
 
       <div className="w-full max-w-4xl flex flex-col items-center animate-fade-in py-8 relative">
         <div className="text-center mb-12">
-          <p className="text-3xl font-bold text-white mb-6">Double the Term Number</p>
+          <p className="text-3xl font-bold text-white mb-6">Double the term number</p>
 
           {/* Centered Hint Area */}
           <div className="h-16 flex items-center justify-center">
@@ -88,7 +88,7 @@ const PatternLevel1: React.FC<LevelComponentProps> = ({ onComplete, onExit, onNe
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 w-full mb-12">
           <div className="flex flex-col gap-6">
-            <h3 className="text-xl font-bold text-white mb-2">1. Select a Term</h3>
+            <h3 className="text-xl font-bold text-white mb-2">1. Select a term</h3>
             {[1, 2, 3, 4].map(t => (
               <button
                 key={t}
@@ -102,11 +102,11 @@ const PatternLevel1: React.FC<LevelComponentProps> = ({ onComplete, onExit, onNe
               >
                 <div className="text-left">
                   <span className="text-[10px] text-slate-500 font-black uppercase italic block">Position</span>
-                  <span className="text-3xl font-black text-white italic">Term {t}</span>
+                  <span className="text-3xl font-black text-white italic">term {t}</span>
                 </div>
                 <div className="text-right">
                   {matches[t] ? (
-                    <div className="bg-white/20 px-4 py-2 rounded-xl text-white font-black italic whitespace-nowrap">Term Value: {matches[t]}</div>
+                    <div className="bg-white/20 px-4 py-2 rounded-xl text-white font-black italic whitespace-nowrap">term value: {matches[t]}</div>
                   ) : (
                     <div className={`w-8 h-8 rounded-full border-2 border-dashed ${selectedTerm === t ? 'border-sky-400 animate-pulse' : 'border-slate-700'}`} />
                   )}
@@ -116,7 +116,7 @@ const PatternLevel1: React.FC<LevelComponentProps> = ({ onComplete, onExit, onNe
           </div>
 
           <div className="flex flex-col gap-6">
-            <h3 className="text-xl font-bold text-white mb-2">2. Pick the Correct Value</h3>
+            <h3 className="text-xl font-bold text-white mb-2">2. Pick the correct value</h3>
             <div className="grid grid-cols-2 gap-4 h-full">
               {values.map(v => {
                 const isMatched = Object.values(matches).includes(v);

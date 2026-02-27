@@ -37,7 +37,7 @@ const PatternLevel3: React.FC<LevelComponentProps> = ({ onComplete, onExit, onNe
   const tasks: RuleTask[] = [
     { 
       seq: [11, 15, 19, 23, 27, 31], 
-      options: ['Add 2 each time', 'Add 4 each time', 'Multiply 2 each time', 'Multiply 4 each time'], 
+      options: ['Add 2 each time', 'Add 4 each time', 'Multiply by 2 each time', 'Multiply by 4 each time'], 
       correct: 1,
       hint: "How do the numbers change each step?"
     },
@@ -49,7 +49,7 @@ const PatternLevel3: React.FC<LevelComponentProps> = ({ onComplete, onExit, onNe
     },
     { 
       seq: [5, 10, 20, 40, 80], 
-      options: ['Add 5 each time', 'Add 10 each time', 'Multiply 2 each time', 'Multiply 5 each time'], 
+      options: ['Add 5 each time', 'Add 10 each time', 'Multiply by 2 each time', 'Multiply by 5 each time'], 
       correct: 2,
       hint: "How do the numbers change each step?"
     },

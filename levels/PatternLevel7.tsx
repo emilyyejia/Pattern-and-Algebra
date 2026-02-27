@@ -19,15 +19,15 @@ const PatternLevel7: React.FC<LevelComponentProps> = ({ onComplete, onExit, onNe
     {
       // SPECIAL QUESTION 1
       type: 'multi',
-      instruction: "A linear pattern adds or subtracts the same amount each time. Select TWO number patterns that are linear.",
+      instruction: "A linear pattern adds or subtracts the same amount each time. Select two number patterns that are linear.",
       options: [
         { label: "2, 4, 6, 8, 10", isCorrect: true },
         { label: "10, 20, 40, 80, 160", isCorrect: false },
         { label: "100, 90, 80, 70, 60, 50", isCorrect: true },
         { label: "120, 60, 30, 15, 7.5", isCorrect: false }
       ],
-      correctFeedback: "Great job! When a pattern is growing or shrinking by the same amount each time, it is called a LINEAR PATTERN.",
-      hint: "Find the patterns where the change is always the same."
+      correctFeedback: "Great job! When a pattern is growing or shrinking by the same amount each time, it is called a linear pattern.",
+      hint: "Try again! A linear pattern always uses the SAME step. Find the two with the SAME change each time."
     },
     { 
       type: 'standard',
@@ -179,13 +179,12 @@ const PatternLevel7: React.FC<LevelComponentProps> = ({ onComplete, onExit, onNe
             ) : (
                 <>
                     <div className="text-center mb-10">
-                        <p className="text-slate-500 font-bold text-xs tracking-wide mb-2">The Pattern</p>
+                        <p className="text-slate-400 font-bold text-4xl tracking-wide mb-6">Look closely: is this pattern linear, or not?</p>
                         <p className="text-4xl font-black text-white leading-tight italic">"{currentQ.label}"</p>
                     </div>
 
                     {stage === 1 ? (
                     <div className="w-full space-y-6 animate-fade-in">
-                        <h3 className="text-3xl font-bold text-center text-white mb-4">Linear or Not?</h3>
                         <div className="flex gap-4 w-full">
                         <button 
                             onClick={() => handleLinearChoice(true)} 
@@ -202,7 +201,7 @@ const PatternLevel7: React.FC<LevelComponentProps> = ({ onComplete, onExit, onNe
                         </div>
                         {feedback === 'incorrect' && (
                         <div className="bg-red-500/10 border border-red-500/30 p-4 rounded-xl mt-4 animate-fade-in">
-                            <p className="text-red-400 font-bold text-center italic">Linear means when a pattern that changes by the same amount each step.</p>
+                            <p className="text-red-400 font-bold text-center italic text-xl">Linear patterns play fair—they use the same jump every turn.</p>
                         </div>
                         )}
                     </div>

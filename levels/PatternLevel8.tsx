@@ -13,19 +13,19 @@ const PhaseAssess: React.FC<{ onComplete: (stars: number) => void }> = ({ onComp
 
     const questions = [
         { 
-            q: "A candle burns 3cm every hour. It starts at 20cm. How tall after 4 hours?", 
+            q: "A candle starts at 20cm. It burns 3cm every hour. How tall after 4 hours?", 
             ans: 8,
-            hint: "Subtract 3cm for each hour (3 x 4)."
+            hint: "The candle gets shorter each hour. How much shorter after 4 hours?"
         },
         { 
-            q: "You save $5 a day. You have $20 now. How much in 10 days?", 
+            q: "You start with $20. You save $5 every day. How much will you have in 10 days?", 
             ans: 70,
-            hint: "Add $5 for each of the 10 days to your current $20."
+            hint: "Not quite! Remember, you add the same $5 each day. Try counting up from $20 in steps of 5."
         },
         { 
-            q: "A water tank loses 3 litres of water every hour. It starts with 20 litres of water. How much water is left after 5 hours?", 
+            q: "A water tank loses 3 litres of water every hour. It starts with 20 litres. How much water is left after 5 hours?", 
             ans: 5,
-            hint: "Water tank starts at 20L. After 1 hour, 17L is left."
+            hint: "Almost! Start from 20 litres and think about how much water is gone after losing the same amount each hour."
         },
     ];
 
@@ -95,7 +95,7 @@ const PatternLevel8: React.FC<LevelComponentProps> = ({ onComplete, onExit, part
       </div>
       {phase === 'intro' && (
           <div className="flex flex-col items-center justify-center h-full p-4 text-center">
-              <p className="text-3xl max-w-xl text-white mb-8 font-bold">Predict what happens in a linear pattern into the future.</p>
+              <p className="text-3xl max-w-xl text-white mb-8 font-bold">Use the pattern to predict what comes next!</p>
               <button onClick={() => setPhase('practice')} className="bg-sky-500 px-12 py-3 rounded-full font-black uppercase italic shadow-lg hover:scale-105 transition-all">Start</button>
           </div>
       )}
@@ -106,7 +106,7 @@ const PatternLevel8: React.FC<LevelComponentProps> = ({ onComplete, onExit, part
                 
                 {showPracticeHint && (
                     <div className="mb-8 p-6 bg-red-500/10 rounded-xl animate-fade-in border border-red-500/20">
-                        <p className="text-red-400 font-bold italic text-lg leading-relaxed">Term 1 is 10. You add 5 for each step. Term 10 is 9 steps after Term 1 (10 + 9 × 5).</p>
+                        <p className="text-red-400 font-bold italic text-lg leading-relaxed">Term 1 is 10. The pattern increases by 5 each time. What is term 10?</p>
                     </div>
                 )}
 
